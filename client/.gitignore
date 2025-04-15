@@ -1,8 +1,0 @@
-.DS_Store
-build/
-node_modules/
-npm-debug.log
-yarn-error.log
-\.buckd/
-.DS_Store
-logs.*
