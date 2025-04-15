@@ -1,0 +1,16 @@
+{
+  "name": "logger",
+  "version": "1.0.4",
+  "repository": "https://github.com/package-dev/logger",
+  "description": "logger",
+  "author": "phamha98",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "ISC",
+  "keywords": [],
+  "dependencies": {
+    "socket.io-client": "^4.8.1"
+  }
+}

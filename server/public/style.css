@@ -1,0 +1,105 @@
+body {
+    /* font-family: monospace; */
+    background: #111;
+    color: #eee;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    /* padding: 20px; */
+}
+
+#log-container {
+    /* max-height: 100vh; */
+    overflow-y: auto;
+    /* border: 1px solid #444; */
+    /* padding: 10px; */
+    /* background: #1e1e1e; */
+    width: 100%; 
+    border-collapse: collapse;
+    color: #888;
+}
+
+.log-entry {
+    /* margin-bottom: 10px; */
+    /* white-space: pre-wrap; */
+    /* border-bottom: 1px solid #333; */
+    /* padding-bottom: 5px; */
+    /* background: #252323; */
+    /* border: 1px solid #444; */
+    padding: 5px 30px  ;
+    overflow-y: auto;
+    display: flex;
+    flex: 1;
+
+}
+#log-container thead,
+#log-container tbody {
+    border: none;
+}
+#log-container th, #log-container td {
+    padding: 5px;
+    border: 1px solid #444;  
+    text-align: left;
+}
+.last-item {
+    background-color: #444; /* Màu nền đậm hơn */
+    font-weight: bold; /* Chữ đậm */
+    color: #e20202; /* Màu chữ sáng hơn */
+}
+#log-container th {
+    background-color: #333;
+}
+ 
+.msg pre {
+    /* background: #eee; */
+    /* padding-left: 20px; */
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+}
+#filters {
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+input,
+select {
+    padding: 4px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+#search {
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: none;
+    flex: 1;
+}
+
+#search-btn {
+    /* padding: 8px 12px; */
+    font-size: 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#search-btn:hover {
+    background-color: #555;
+}
+
+
+#log-container .timestamp {
+    width: 10%; /* Cột Timestamp chiếm 20% chiều rộng */
+}
+
+#log-container .action {
+    width: 10%; /* Cột Action chiếm 30% chiều rộng */
+}
+
+#log-container .msg {
+    width: 50%; /* Cột Message chiếm 50% chiều rộng */
+}

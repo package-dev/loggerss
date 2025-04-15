@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Log Viewer</title>
+
+    <!-- Style riêng -->
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <!-- Highlight.js CSS theme -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/vs2015.min.css" />
+</head>
+
+<body>
+    <div id="filters">
+        <label>
+            <input type="text" id="search" placeholder="Search..." oninput="onInput()" />
+        </label>
+        <button id="search-btn" title="Search">🔍</button>
+    </div>
+
+    <!-- <div id="log-container"></div> -->
+    <table id="log-container">
+        <tr>
+            <th class="timestamp">Timestamp</th>
+            <th class="action">Action</th>
+            <th class="msg">Message</th>
+        </tr>
+        <tbody>
+            <!-- Dữ liệu logs sẽ được chèn vào đây -->
+        </tbody>
+    </table>
+    <!-- Socket.IO client -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Highlight.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/json.min.js"></script>
+
+    <script>
+        const logContainer = document.getElementById("log-container").querySelector("tbody");;
+        const searchInput = document.getElementById("search");
+        const button = document.getElementById("search-btn");
+        let logs = [];
+
+        button.addEventListener("click", () => {
+            renderLogs();
+        });
+
+        fetch("/logs?sort=1")
+            .then((res) => res.json())
+            .then((data) => {
+                logs = data;
+                renderLogs();
+            })
+            .catch((err) => {
+                console.error("Error loading logs:", err);
+            });
+
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        const renderLogs = () => {
+            const search = searchInput.value.toLowerCase();
+            const filtered = logs.filter((log) => {
+                return JSON.stringify(log).toLowerCase().includes(search);
+            });
+            filtered.forEach((log) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="timestamp">${log.timestamp}</td>
+                    <td class="action">${log.action}</td>
+                    <td class="msg">
+                        <pre>${JSON.stringify(JSON.parse(log.msg))}</pre>
+                    </td>
+                `;
+                logContainer.appendChild(tr);
+                tr.querySelectorAll("pre code").forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+            });
+            logContainer.scrollIntoView({ block: "end" });
+        };
+
+        const socket = io();
+        socket.on("connect", () => {
+            console.log("Connected to server");
+            socket.on("log", (data) => {
+                logs.push(data);
+                renderLogs();
+            });
+        });
+
+        socket.on("connect_error", (err) => {
+            console.error("Socket.IO connection error:", err);
+        });
+
+        function debounce(fn, delay) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+
+        function handleSearchInput(value) {
+            const keyword = value.toLowerCase();
+            const entries = document.querySelectorAll(".log-entry");
+
+            entries.forEach((entry) => {
+                const text = entry.textContent.toLowerCase();
+                entry.style.display = text.includes(keyword) ? "" : "none";
+            });
+        }
+
+        const debouncedHandleSearchInput = debounce(handleSearchInput, 300);
+        function onInput() {
+            const search = searchInput.value.toLowerCase();
+            handleSearchInput(search);
+        }
+    </script>
+</body>
+
+</html>
