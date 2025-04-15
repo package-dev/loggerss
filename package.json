@@ -1,8 +1,8 @@
 {
-  "name": "logger",
-  "version": "1.0.4",
-  "repository": "https://github.com/package-dev/logger",
-  "description": "logger",
+  "name": "loggerss",
+  "version": "2.0.1",
+  "repository": "https://github.com/package-dev/loggerss/tree/client",
+  "description": "loggerss",
   "author": "phamha98",
   "main": "index.ts",
   "scripts": {
